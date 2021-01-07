@@ -109,7 +109,15 @@ waitForArduino()
 
 
 testData = []
-testData.append("<update,200,0,0>")
+
+# testdata will send a string followed by the RGB values or the concern level 
+# for the testData to be valid correct fields needs to be setup on the arduino code
+
+#  to send New RGB Colors
+# testData.append("<update,200,0,0>")
+
+#  to send ConcernValue
+testData.append("<update,20")
 
 
 run(testData)

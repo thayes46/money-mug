@@ -18,7 +18,7 @@ char messageFromPC[buffSize] = {0};
 int red = 0;
 int green = 0;
 int blue = 0;
-
+int concernValue = 0;
 unsigned long curMillis;
 
 unsigned long prevReplyToPCmillis = 0;
@@ -105,15 +105,17 @@ void parseData() {
   strtokIndx = strtok(inputBuffer,",");      // get the first part - the string
   strcpy(messageFromPC, strtokIndx); // copy it to messageFromPC
   
-  strtokIndx = strtok(NULL, ","); // this continues where the previous call left off
-  red = atoi(strtokIndx);     // convert this part to an integer
+  // strtokIndx = strtok(NULL, ","); // this continues where the previous call left off
+  // red = atoi(strtokIndx);     // convert this part to an integer
   
-  strtokIndx = strtok(NULL, ","); 
-  green = atoi(strtokIndx);     // convert this part to a integer
+  // strtokIndx = strtok(NULL, ","); 
+  // green = atoi(strtokIndx);     // convert this part to a integer
+
+  // strtokIndx = strtok(NULL, ",");
+  // blue = atoi(strtokIndx);
 
   strtokIndx = strtok(NULL, ",");
-  blue = atoi(strtokIndx);
-  
+  concernValue = atoi(strtokIndx); // convert this part to a integer
 
 }
 
