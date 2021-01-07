@@ -18,6 +18,8 @@ LIS3DHTR<TwoWire> LIS(I2C_MODE);//IIC
 
 #define PIXEL_COUNT 10  // Number of NeoPixels
 
+#define TOLERANCE 160
+
 //Bounds for each level of concern, 0-33 = no concern, 34 - 66 warning, 67-100 beeg concern
 #define lowerQuartile 30
 #define upperQuartile 66
@@ -74,12 +76,14 @@ void setup() {
   LIS.begin(WIRE); //IIC init
   delay(100);
   LIS.setOutputDataRate(LIS3DHTR_DATARATE_50HZ);
-  oldAcceleration = readAcceleration();
   newAcceleration = readAcceleration();
   Serial.println("<Arduino is ready>");
 }
 
 void loop() {
+
+  Serial.println(readAcceleration());
+//   /*
   boolean newState = digitalRead(BUTTON_PIN);
   // Check if button was pressed
   if((newState == LOW) && (oldState == HIGH)) {
@@ -91,15 +95,20 @@ void loop() {
       if(++mode > 5) mode = 0; // Advance to next mode, wrap around after #8
       switch(mode) {           // Start the new animation...
         case 0:
+          clearPixels();
           //Listen to serial and respond accordingly
           colorScheme = 0; // Default colors
           while (digitalRead(BUTTON_PIN) == newState) {
             //wait for pick and place
             newAcceleration = readAcceleration();
-            if (newAcceleration > oldAcceleration
-            //fetch concern from serial
-            getDataFromPC();  
-            showLevel(concern, colorScheme);
+            if (newAcceleration > oldAcceleration + TOLERANCE) {
+              while (readAcceleration() > oldAcceleration + TOLERANCE){};
+              //fetch concern from serial
+              getDataFromPC();  
+              showLevel(concern, colorScheme); 
+              delay(5000);
+              clearPixels();
+            }            
           }
           break;
         case 1:
@@ -155,25 +164,34 @@ void loop() {
         case 5:
           //demo with per-pixel granularity
           colorScheme = 2;
+          clearPixels();
           while (digitalRead(BUTTON_PIN) == newState) {
-            //fetch data from serial
-            getDataFromPC();            
-            int max_led = (int) concern / 10;
-            max_led = 10 - max_led; //invert since 0 is good
-            int i = 0;
-            for (; i < max_led; i++) {
-              setLight(i, colorScheme);
+            
+            newAcceleration = readAcceleration();
+            if (newAcceleration > oldAcceleration + TOLERANCE) {
+              while (readAcceleration() > oldAcceleration + TOLERANCE){};
+              //fetch concern from serial
+              getDataFromPC();            
+              int max_led = (int) concern / 10;
+              max_led = 10 - max_led; //invert since 0 is good
+              int i = 0;
+              for (; i < max_led; i++) {
+                setLight(i, colorScheme);
+              }
+              for (;i < strip.numPixels(); i++) {
+                strip.setPixelColor(i,BLACK);
+              }
+              strip.show();
+              delay(5000);
+              clearPixels();
             }
-            for (;i < strip.numPixels(); i++) {
-              strip.setPixelColor(i,BLACK);
-            }
-            strip.show();
           }
           break;
       }
     }
   }
   oldState = newState;
+//  */
 }
 
 //Method to display current level whenever shook
@@ -320,14 +338,19 @@ void parseData() {
 
 }
 
+void clearPixels() {
+  for (int i = 0; i < 10; i++) {
+    strip.setPixelColor(i, BLACK);
+  }
+  strip.show();
+}
+
 int readAcceleration() {
   int xValue = (int)(LIS.getAccelerationX() *1023.0);
   int yValue = (int)(LIS.getAccelerationY() *1023.0);
   int zValue = (int)(LIS.getAccelerationZ() *1023.0);
   int norm = sqrt(
-    xValue * xValue +
-    yValue * yValue +
-    zValue * zValue 
+    yValue * yValue //y value is only one consistently under 100 for "stable" state
   );
   return norm;  
 }
