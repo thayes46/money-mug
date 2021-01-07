@@ -1,5 +1,6 @@
 import cv2
 import pytesseract
+import pymysql 
 
 # Finds date in string
 def find_date(input_string):
@@ -49,8 +50,28 @@ def get_receipt_info(image):
 
 
 
+endpoint = 'database-112.crz5qomac1oy.us-east-2.rds.amazonaws.com'
+username = 'testUser'
+password = 'confirm1'
+database_name = 'Transactions'
+connection = pymysql.connect(host = endpoint, user=username, passwd=password, db = database_name, autocommit=True)
+def handler(receipt_info):
+    cursor = connection.cursor()
+    num_rows = cursor.execute('SELECT * from TRANSACTIONS')
+
+    rows = cursor.fetchall()
+    
+    id_number = int(rows[num_rows-1][0])+ 1
+	date = date[6:] + "/" +  date[0:5] #format date yyyy/mm/dd
+    date = "\"" + str(receipt_info["Date"]) + "\""
+    total = receipt_info["Total"]
+
+    sqlQuery = "INSERT INTO TRANSACTIONS (transaction_id, transaction_date, total, transaction_type) VALUES(" + str(id_number) + ", " + date + ", " + str(total) + ", " + str(1) +")"
+
+    cursor.execute(sqlQuery)
 
 
+handler(get_receipt_info("receipt.png"))
 
 
 
