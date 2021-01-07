@@ -74,7 +74,7 @@ void loop() {
     // Check if button is still low after debounce.
     newState = digitalRead(BUTTON_PIN);
     if(newState == LOW) {      // Yes, still low
-      if(++mode > 4) mode = 0; // Advance to next mode, wrap around after #8
+      if(++mode > 5) mode = 0; // Advance to next mode, wrap around after #8
       switch(mode) {           // Start the new animation...
         case 0:
           //Listen to serial and respond accordingly
