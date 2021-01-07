@@ -4,6 +4,10 @@
 #ifdef __AVR__
  #include <avr/power.h> // Required for 16 MHz Adafruit Trinket
 #endif
+#include <Wire.h>
+#include "LIS3DHTR.h"
+LIS3DHTR<TwoWire> LIS(I2C_MODE);//IIC
+#define WIRE Wire
 
 // Digital IO pin connected to the button. This will be driven with a
 // pull-up resistor so the switch pulls the pin to ground momentarily.
@@ -42,19 +46,24 @@ int     concern      = 0;
  * 2 = 0-2 RED 3 ORANGE 4-5 YELLOW 6-7 GREEN 8 BLUE 9 PURPLE
  */
 
+//Variable setup for serial
 const byte buffSize = 40;
 char inputBuffer[buffSize];
 const char startMarker = '<';
 const char endMarker = '>';
 byte bytesRecvd = 0;
-boolean readInProgress = false;
-boolean newDataFromPC = false;
-
+bool readInProgress = false;
+bool newDataFromPC = false;
 char messageFromPC[buffSize] = {0};
-
 unsigned long curMillis;
 unsigned long prevReplyToPCmillis = 0;
 unsigned long replyToPCinterval = 1000;
+
+//Variable setup for Accelerometer Jazz
+bool moving = false;
+int  oldAcceleration = 0;
+int  newAcceleration = 0;
+
 
 void setup() {
   pinMode(BUTTON_PIN, INPUT_PULLUP);
@@ -62,6 +71,11 @@ void setup() {
   strip.begin(); // Initialize NeoPixel strip object (REQUIRED)
   strip.setBrightness(50);
   strip.show();  // Initialize all pixels to 'off'
+  LIS.begin(WIRE); //IIC init
+  delay(100);
+  LIS.setOutputDataRate(LIS3DHTR_DATARATE_50HZ);
+  oldAcceleration = readAcceleration();
+  newAcceleration = readAcceleration();
   Serial.println("<Arduino is ready>");
 }
 
@@ -80,8 +94,11 @@ void loop() {
           //Listen to serial and respond accordingly
           colorScheme = 0; // Default colors
           while (digitalRead(BUTTON_PIN) == newState) {
+            //wait for pick and place
+            newAcceleration = readAcceleration();
+            if (newAcceleration > oldAcceleration
             //fetch concern from serial
-            getDataFromPC();            
+            getDataFromPC();  
             showLevel(concern, colorScheme);
           }
           break;
@@ -301,4 +318,16 @@ void parseData() {
   strtokIndx = strtok(NULL, ",");
   concern = atoi(strtokIndx); // convert this part to a integer
 
+}
+
+int readAcceleration() {
+  int xValue = (int)(LIS.getAccelerationX() *1023.0);
+  int yValue = (int)(LIS.getAccelerationY() *1023.0);
+  int zValue = (int)(LIS.getAccelerationZ() *1023.0);
+  int norm = sqrt(
+    xValue * xValue +
+    yValue * yValue +
+    zValue * zValue 
+  );
+  return norm;  
 }
