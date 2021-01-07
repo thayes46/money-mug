@@ -73,5 +73,5 @@ def handler(receipt_info):
 
 handler(get_receipt_info("receipt.png"))
 
-
+connection.close()
 
