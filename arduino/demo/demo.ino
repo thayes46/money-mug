@@ -32,7 +32,7 @@
 Adafruit_NeoPixel strip(PIXEL_COUNT, PIXEL_PIN, NEO_GRB + NEO_KHZ800);
 
 boolean oldState     = HIGH;
-int     mode         = 0;    // Currently-active animation mode, 0-9
+int     mode         = -1;    // Currently-active animation mode, 0-9
 short   colorScheme  = 0;  // How the user selects the colors of the lEDs
 int     concern      = 0;
 
@@ -42,13 +42,27 @@ int     concern      = 0;
  * 2 = 0-2 RED 3 ORANGE 4-5 YELLOW 6-7 GREEN 8 BLUE 9 PURPLE
  */
 
+const byte buffSize = 40;
+char inputBuffer[buffSize];
+const char startMarker = '<';
+const char endMarker = '>';
+byte bytesRecvd = 0;
+boolean readInProgress = false;
+boolean newDataFromPC = false;
+
+char messageFromPC[buffSize] = {0};
+
+unsigned long curMillis;
+unsigned long prevReplyToPCmillis = 0;
+unsigned long replyToPCinterval = 1000;
+
 void setup() {
   pinMode(BUTTON_PIN, INPUT_PULLUP);
-  Serial.begin(96000);
+  Serial.begin(9600);
   strip.begin(); // Initialize NeoPixel strip object (REQUIRED)
   strip.setBrightness(50);
-  showLevel(0, 2);
   strip.show();  // Initialize all pixels to 'off'
+  Serial.println("<Arduino is ready>");
 }
 
 void loop() {
@@ -67,12 +81,8 @@ void loop() {
           colorScheme = 0; // Default colors
           while (digitalRead(BUTTON_PIN) == newState) {
             //fetch concern from serial
-
-            //temp just to show something:
-              showLevel(50, 2);
-
-            
-//            showLevel(concern, colorScheme);
+            getDataFromPC();            
+            showLevel(concern, colorScheme);
           }
           break;
         case 1:
@@ -112,10 +122,25 @@ void loop() {
           while (digitalRead(BUTTON_PIN) == newState) {
             concern += 5;
             if (concern > 100) concern = 0;
-            delay(100);
-            
+            delay(100);          
+            int max_led = (int) concern / 10;
+            max_led = 10 - max_led; //invert since 0 is good
+            int i = 0;
+            for (; i < max_led; i++) {
+              setLight(i, colorScheme);
+            }
+            for (;i < strip.numPixels(); i++) {
+              strip.setPixelColor(i,BLACK);
+            }
+            strip.show();
+          }
+          break;
+        case 5:
+          //demo with per-pixel granularity
+          colorScheme = 2;
+          while (digitalRead(BUTTON_PIN) == newState) {
             //fetch data from serial
-            
+            getDataFromPC();            
             int max_led = (int) concern / 10;
             max_led = 10 - max_led; //invert since 0 is good
             int i = 0;
@@ -235,4 +260,45 @@ void setLight(int index, short pattern) {
       }
       break;
   }
+}
+
+
+//method to grab data from serial
+void getDataFromPC() {
+  // receive data from PC and save it into inputBuffer
+  if(Serial.available() > 0) {
+    char x = Serial.read();
+      // the order of these IF clauses is significant
+    if (x == endMarker) {
+      readInProgress = false;
+      newDataFromPC = true;
+      inputBuffer[bytesRecvd] = 0;
+      parseData();
+    }    
+    if(readInProgress) {
+      inputBuffer[bytesRecvd] = x;
+      bytesRecvd ++;
+      if (bytesRecvd == buffSize) {
+        bytesRecvd = buffSize - 1;
+      }
+    }
+    if (x == startMarker) { 
+      bytesRecvd = 0; 
+      readInProgress = true;
+    }
+  }
+}
+
+
+//Reading buffer
+void parseData() {
+    
+  char * strtokIndx; // this is used by strtok() as an index
+  
+  strtokIndx = strtok(inputBuffer,",");      // get the first part - the string
+  strcpy(messageFromPC, strtokIndx); // copy it to messageFromPC
+
+  strtokIndx = strtok(NULL, ",");
+  concern = atoi(strtokIndx); // convert this part to a integer
+
 }
