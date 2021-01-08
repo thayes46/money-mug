@@ -1,4 +1,3 @@
-
 def sendToArduino(sendStr):
     serialConnection.write(sendStr.encode('utf-8'))
 
@@ -68,38 +67,45 @@ def run(td):
         time.sleep(5)
 
 
-import serial
-import time
+import serial, time
 
 print()
 print()
 
 # NOTE the user must ensure that the serial port and baudrate are correct
-# serPort = "/dev/ttyS80 or /dev/cu.usbserial-0001"
-serPort = "/dev/cu.usbserial-0001"
-baudRate = 9600
-serialConnection = serial.Serial(serPort, baudRate)
+serPort = "/dev/ttyUSB1"
+# serPort = input("List the absolute path to the port like /dev/ttyUSB0 or /dev/cu.usbserial-0001:\n")
+baudRate = 115200
+arduino = serial.Serial(serPort, baudRate)
 print("Serial port " + serPort + " opened  Baudrate " + str(baudRate))
-
-startMarker = 60
-endMarker = 62
-
-waitForArduino()
-
-
-testData = []
-concern = input("ConcernValue")
-# testdata will send a string followed by the RGB values or the concern level 
-# for the testData to be valid correct fields needs to be setup on the arduino code
-
-#  to send New RGB Colors
-# testData.append("<update,200,0,0>")
-    #  to send ConcernValue
-testData.append("<update," + concern + ">")
+time.sleep(2)
+arduino.write("x069")
+while True:
+    data = arduino.read(1)
+    # if data:
+    print data
 
 
-run(testData)
 
 
-serialConnection.close
+# startMarker = 60
+# endMarker = 62
+
+# waitForArduino()
+
+
+# testData = []
+# concern = input("ConcernValue:\n")
+# while (concern != 0) :
+    # testdata will send a string followed by the RGB values or the concern level 
+    # for the testData to be valid correct fields needs to be setup on the arduino code
+
+    #  to send New RGB Colors
+# testData.append("<update, 40>")
+        #  to send ConcernValue
+# testData.append("<update," + (str)(concern) + ">")
+# run(testData)
+
+
+arduino.close
 

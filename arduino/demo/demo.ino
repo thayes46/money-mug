@@ -65,11 +65,12 @@ unsigned long replyToPCinterval = 1000;
 bool moving = false;
 int  oldAcceleration = 0;
 int  newAcceleration = 0;
+char concernStr[6];
 
 
 void setup() {
   pinMode(BUTTON_PIN, INPUT_PULLUP);
-  Serial.begin(9600);
+  Serial.begin(115200);
   strip.begin(); // Initialize NeoPixel strip object (REQUIRED)
   strip.setBrightness(50);
   strip.show();  // Initialize all pixels to 'off'
@@ -99,13 +100,30 @@ void loop() {
           //Listen to serial and respond accordingly
           colorScheme = 0; // Default colors
           while (digitalRead(BUTTON_PIN) == newState) {
+            
+            int index = 0;
+            if (Serial.available()){
+              do {
+              char data = Serial.read();
+//              Serial.print("<received data: "); Serial.print(data); Serial.println(">");
+              concernStr[index] = data;
+              index++;
+              } while (Serial.available());
+              concernStr[4] = '\0';            
+            }
             //wait for pick and place
             newAcceleration = readAcceleration();
             if (newAcceleration > oldAcceleration + TOLERANCE) {
               while (readAcceleration() > oldAcceleration + TOLERANCE){};
               //fetch concern from serial
-              getDataFromPC();
-              Serial.println("received data: "); Serial.println(concern);
+//              Serial.print("Latest data: "); Serial.print(concernStr);
+              String concernString = "";
+              for (int i = 1; i < 4; i++) {
+                concernString.concat(concernStr[i]);
+              }
+//              Serial.println(concernString);
+              concern = concernString.toInt();
+//              Serial.print(concern);
               showLevel(concern, colorScheme); 
               delay(5000);
               clearPixels();
@@ -172,7 +190,7 @@ void loop() {
             if (newAcceleration > oldAcceleration + TOLERANCE) {
               while (readAcceleration() > oldAcceleration + TOLERANCE){};
               //fetch concern from serial
-              getDataFromPC();            
+              listenSerial();            
               int max_led = (int) concern / 10;
               max_led = 10 - max_led; //invert since 0 is good
               int i = 0;
@@ -298,46 +316,62 @@ void setLight(int index, short pattern) {
   }
 }
 
-
-//method to grab data from serial
-void getDataFromPC() {
-  // receive data from PC and save it into inputBuffer
-  if(Serial.available() > 0) {
-    char x = Serial.read();
-      // the order of these IF clauses is significant
-    if (x == endMarker) {
-      readInProgress = false;
-      newDataFromPC = true;
-      inputBuffer[bytesRecvd] = 0;
-      parseData();
-    }    
-    if(readInProgress) {
-      inputBuffer[bytesRecvd] = x;
-      bytesRecvd ++;
-      if (bytesRecvd == buffSize) {
-        bytesRecvd = buffSize - 1;
-      }
-    }
-    if (x == startMarker) { 
-      bytesRecvd = 0; 
-      readInProgress = true;
-    }
+void listenSerial() {
+//  char str[5];
+  int index = 0;
+  while (Serial.available()) {
+    //should be {'x','0','1','2','\0'}
+    char data = Serial.read();
+    char str[2];
+    str[0] = data;
+    str[1] = '\0';
+    Serial.print(str);
   }
-}
-
-
-//Reading buffer
-void parseData() {
-    
-  char * strtokIndx; // this is used by strtok() as an index
+//  str[4] = '\0';
   
-  strtokIndx = strtok(inputBuffer,",");      // get the first part - the string
-  strcpy(messageFromPC, strtokIndx); // copy it to messageFromPC
-
-  strtokIndx = strtok(NULL, ",");
-  concern = atoi(strtokIndx); // convert this part to a integer
-
 }
+
+
+////method to grab data from serial
+//void getDataFromPC() {
+//  // receive data from PC and save it into inputBuffer
+//  while(Serial.available() > 0) {
+//    char x = Serial.read();
+//    Serial.print(x);
+//      // the order of these IF clauses is significant
+//    if (x == endMarker) {
+//      readInProgress = false;
+//      newDataFromPC = true;
+//      inputBuffer[bytesRecvd] = 0;
+//      parseData();
+//    }    
+//    if(readInProgress) {
+//      inputBuffer[bytesRecvd] = x;
+//      bytesRecvd ++;
+//      if (bytesRecvd == buffSize) {
+//        bytesRecvd = buffSize - 1;
+//      }
+//    }
+//    if (x == startMarker) { 
+//      bytesRecvd = 0; 
+//      readInProgress = true;
+//    }
+//  }
+//}
+//
+//
+////Reading buffer
+//void parseData() {
+//    
+//  char * strtokIndx; // this is used by strtok() as an index
+//  
+//  strtokIndx = strtok(inputBuffer,",");      // get the first part - the string
+//  strcpy(messageFromPC, strtokIndx); // copy it to messageFromPC
+//
+//  strtokIndx = strtok(NULL, ",");
+//  concern = atoi(strtokIndx); // convert this part to a integer
+//
+//}
 
 void clearPixels() {
   for (int i = 0; i < 10; i++) {
