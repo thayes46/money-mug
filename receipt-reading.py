@@ -50,9 +50,9 @@ def get_receipt_info(image):
 
 
 
-endpoint = 'database-112.crz5qomac1oy.us-east-2.rds.amazonaws.com'
+endpoint = 'redacted'
 username = 'testUser'
-password = 'confirm1'
+password = 'redacted'
 database_name = 'Transactions'
 connection = pymysql.connect(host = endpoint, user=username, passwd=password, db = database_name, autocommit=True)
 def handler(receipt_info):
