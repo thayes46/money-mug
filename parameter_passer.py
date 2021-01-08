@@ -8,7 +8,7 @@ from botocore.exceptions import ClientError
 def jsonCreation(name, limit, range): # creates json for all the information given by the user.
     jsonObj = {} #creation of JSON object
     jsonObj['data'] = []
-    jsonObj['data'].append({'name': name, 'limit': limit, 'range': range})
+    jsonObj['data'].append({'name': name, 'limit': limit, 'range': range, 'category': 'coffee'})
 
     return jsonObj
 
