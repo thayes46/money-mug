@@ -79,11 +79,13 @@ baudRate = 115200
 arduino = serial.Serial(serPort, baudRate)
 print("Serial port " + serPort + " opened  Baudrate " + str(baudRate))
 time.sleep(2)
-arduino.write("x069")
+
 while True:
-    data = arduino.read(1)
+    concernLevel = input("Input concern Level: \n")
+    arduino.write("x" + (str)(concernLevel))
+    # data = arduino.read(1)
     # if data:
-    print data
+    # print data
 
 
 

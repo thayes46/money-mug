@@ -78,12 +78,10 @@ void setup() {
   delay(100);
   LIS.setOutputDataRate(LIS3DHTR_DATARATE_50HZ);
   newAcceleration = readAcceleration();
-  Serial.println("<Arduino is ready>");
+//  Serial.println("<Arduino is ready>");
 }
 
 void loop() {
-
-  Serial.println(readAcceleration());
 //   /*
   boolean newState = digitalRead(BUTTON_PIN);
   // Check if button was pressed
