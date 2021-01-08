@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<meta http-equiv="X-UA-Compatible" content="ie=edge" />
+	<link rel="stylesheet" type="text/css" href= "mugstyle.css">
+	<title>My Mug</title>
+</head>
+	
+<body>
+	<header>
+		<div class="logo-container">
+			<h4 class="logo">Money Mug</h4>
+		</div>
+
+		<nav>
+			<ul class="nav-links">
+				<li><a class="nav-link" href="/home">Home</a></li>
+				<li><a class="nav-link" href="#">Shop</a></li>
+				<li><a class="nav-link" href="/mymug">My Mug</a></li>
+				<li><a class="nav-link" href="/home#About">About Us</a></li>
+				<li><a class="nav-link" href="/home#Contact">Contact Us</a></li>
+				<li><a class="nav-link" href="#">My Account</a></li>
+			</ul>
+		</nav>
+
+		<div class="account-icon">
+			<img src="./static/AccountIcon.png" alt="account-icon" />
+		</div>
+	</header>
+
+	<main>
+		<section class="mymug-welcome">
+			<p class="welcome-text">Welcome back, Mug Man</p>
+		</section>
+
+
+		<section class="upload-transaction">
+
+
+			<div class="upload-receipt">
+				<form action="/upload-image" method="POST" enctype="multipart/form-data">
+					<div class="form-group">
+						<label class="upload-image-title">Upload Image of Receipt</label>
+						<div class="custom-file">
+							<input type="file" class="custom-file-input" name="image" id="image">
+						</div>
+					</div>
+					<button type="submit" class="receipt-upload-button">Submit</button>
+				</form>
+				
+			</div>
+			<div class="mug-power">
+				
+			</div>
+
+
+		</section>
+
+
+		<section class="goal-section">
+			<form method="post" action="#">
+				<div class="goal-background-title">
+					<p class="goal-title">ENTER A GOAL</p>
+				</div>
+				<div class="goal-forum">
+					<p class="goal-name-text">Name:</p>
+					<p><input type="text" name="username"/></p>
+					<p class="goal-spending-text">Max Spending Limit:</p>
+					<p><input type="text" name="maxSpendingLimit"/></p>
+
+					<p class="goal-range-text">Time Range:</p>
+					<input type="radio" id="daily" name="timeframe" value="1" class="radio-checkbox" checked="checked">
+					<label for="daily" class="radio-label">Daily</label>
+					<input type="radio" id="weekly" name="timeframe" value="7" class="radio-checkbox">
+					<label for="weekly" class="radio-label">Weekly</label>
+					<input type="radio" id="monthly" name="timeframe" value="30" class="radio-checkbox">
+					<label for="monthly" class="radio-label">Monthly</label>
+					<input type="radio" id="annually" name="timeframe" value="365" class="radio-checkbox">
+					<label for="annually" class="radio-label">Annually</label>
+					<p><input type="submit" value="Submit" class="goal-submit"/></p>
+				</div>
+				
+			</form>
+
+
+		</section>
+	</main>
+
+
+
+</body>
+
+</html>
