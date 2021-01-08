@@ -1,0 +1,174 @@
+* {
+	margin: 0px;
+	padding: 0px;
+	box-sizing: border-box;
+}
+
+header {
+	display: flex;
+	height: 10vh;
+	margin: auto;
+	align-items: center;
+	box-shadow: 0px 4px 4px rgba(0,0,0,0.1);
+}
+
+.logo-container,
+.nav-links,
+.cart {
+	display: flex;
+}
+
+.logo-container {
+	flex: 1;
+}
+.logo {
+	position: absolute;
+	right: 80%;
+	top: 2.5%;
+	font-family: "Times New Roman", Times, serif;
+	font-style: normal;
+	font-weight: bold;
+	font-size: 30px;
+	color: #000000;
+}
+nav {
+	flex: 2;
+}
+.nav-links {
+	justify-content: space-around;
+	list-style: none;
+}
+.nav-link {
+	font-family: Arial, Helvetica, sans-serif;
+	font-style: normal;
+	font-weight: normal;
+	font-size: 18px;
+	color: #000000;
+	text-decoration: none;
+}
+.account-icon {
+	flex: .2;
+}
+
+
+
+
+
+.Home {
+	display: flex;
+	width: 90%;
+	margin: auto;
+	min-height: 80vh;
+	align-items: center;
+	margin-bottom: 70px
+}
+.introduction {
+	flex: 1;
+}
+.intro-text h1 {
+	font-family: Arial, Helvetica, sans-serif;
+	font-style: normal;
+	font-weight: normal;
+	font-size: 96px;
+	color: black;
+
+}
+.intro-text p {
+	margin-top: 30px;
+	font-family: Arial, Helvetica, sans-serif;
+	font-style: normal;
+	font-weight: 300;
+	font-size: 24px;
+	color: black;
+}
+.intro-butttons {
+	padding: 50px 0px 0px 0px;
+}
+.shop-btn {
+	background: black;
+	width: 150px;
+	height: 50px;
+	cursor: pointer;
+	font-family: Arial, Helvetica, sans-serif;
+	font-weight: normal;
+	font-size: 20px;
+	border: none;
+	color: #F4D6CC;
+}
+
+.shop-btn:hover {
+	background: #F4D6CC;
+	color: black;
+}
+
+
+.reg-btn {
+	background: #F4D6CC;
+	width: 150px;
+	height: 50px;
+	cursor: pointer;
+	font-family: Arial, Helvetica, sans-serif;
+	font-weight: normal;
+	font-size: 20px;
+	border: none;
+	color: black;
+	margin: 30px 0px 0px 30px;
+}
+
+.reg-btn:hover {
+	background: black;
+	color: #F4D6CC;
+}
+
+.cover {
+	flex: 1;
+	display: flex;
+	justify-content: center;
+	height: 60vh;
+}
+.cover img {
+	height: 100%;
+	animation: drop 1.5s ease;
+}
+
+.About {
+	background: #32373B;
+	padding: 72px 325px 72px 96px;
+	box-shadow: 0px 4px 15px 6px rgba(0,0,0,0.25);
+}
+.about-title{
+	color: white;
+	font-family: Arial, Helvetica, sans-serif;
+	font-weight: bold;
+	font-size: 50px;
+
+}
+.about-p1{
+	color: #F4D6CC;
+	font-family: Arial, Helvetica, sans-serif;
+	font-weight: lighter;
+	font-size: 25px;
+	margin: 30px 0px 30px 0px;
+}
+.about-p2{
+	color: #F4D6CC;
+	font-family: Arial, Helvetica, sans-serif;
+	font-weight: lighter;
+	font-size: 25px;
+	margin: 30px 0px 30px 0px;
+
+}
+
+
+@keyframes drop {
+	0% {
+		opacity: 0;
+		transform: translateY(-80px);
+	}
+	100% {
+		opacity: 1;
+		transform: translateY(0px);
+	}
+}
+
+}
