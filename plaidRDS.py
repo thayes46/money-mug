@@ -2,9 +2,9 @@ import json
 import pymysql 
 import requests 
 
-endpoint = 'database-112.crz5qomac1oy.us-east-2.rds.amazonaws.com'
+endpoint = 'redacted'
 username = 'testUser'
-password = 'confirm1'
+password = 'redacted'
 database_name = 'Transactions'
 
 url = "http://3.85.160.110:8000/api/transactions" 
