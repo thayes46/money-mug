@@ -1,0 +1,180 @@
+* {
+	margin: 0px;
+	padding: 0px;
+	box-sizing: border-box;
+}
+
+header {
+	display: flex;
+	height: 10vh;
+	margin: auto;
+	align-items: center;
+	box-shadow: 0px 4px 4px rgba(0,0,0,0.1);
+}
+
+.logo-container,
+.nav-links,
+.cart {
+	display: flex;
+}
+
+.logo-container {
+	flex: 1;
+}
+.logo {
+	position: absolute;
+	right: 80%;
+	top: 2.5%;
+	font-family: "Times New Roman", Times, serif;
+	font-style: normal;
+	font-weight: bold;
+	font-size: 30px;
+	color: #000000;
+}
+nav {
+	flex: 2;
+}
+.nav-links {
+	justify-content: space-around;
+	list-style: none;
+}
+.nav-link {
+	font-family: Arial, Helvetica, sans-serif;
+	font-style: normal;
+	font-weight: normal;
+	font-size: 18px;
+	color: #000000;
+	text-decoration: none;
+}
+.account-icon {
+	flex: .2;
+}
+
+.mymug-welcome{
+	display: flex;
+	width: 90%;
+	margin: 20px 0px 20px 30px;
+	align-items: center;
+}
+.welcome-text {
+	color: #32373B;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 35px
+}
+.upload-transaction {
+	display: flex;
+	padding: 30px 0px 100px 0px;
+	align-items: center;
+	background: #4A5859;
+}
+.upload-receipt {
+	flex: 0 0 65%;
+}
+.upload-image-title {
+	color: #FFFFFF;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 35px;
+	margin-left: 30px;
+}
+.custom-file-input {
+	margin: 10px 0px 0px 30px;
+	border: none;
+  	color: black;
+  	background-color: #F4D6CC;
+  	border-radius: 8px;
+  	font-size: 20px;
+}
+.receipt-upload-button {
+	margin: 10px 0px 0px 30px;
+	border:none;
+	color: black;
+	background-color: #F4D6CC;
+	font-size: 20px;
+	padding:2px 30px 2px 30px;
+	cursor: pointer;
+}
+.receipt-upload-button:hover {
+	color: #F4D6CC;
+	background-color: black;
+}
+.mug-power {
+	flex: 1;
+}
+
+
+
+
+.goal-section {
+	width: 100%;
+	padding: 0px 0px 100px 0px;
+	align-items: center;
+	background: #FFFFFF;
+}
+.goal-background-title {
+	background: #F4D6CC;
+	padding:10px 0px 10px 0px;
+}
+.goal-title{
+	font-family: Arial, Helvetica, sans-serif;
+	color: #32373B;
+	font-weight: lighter;
+	font-size: 25px;
+	margin-left: 30px;
+}
+.goal-forum {
+	padding: 10px 0px 10px 40px
+
+}
+.goal-range-text,
+.goal-name-text,
+.goal-spending-text {
+	padding:10px 0px 10px 0px;
+	font-family: Arial, Helvetica, sans-serif;
+	color: #32373B;
+	font-size: 20px
+}
+
+.radio-checkbox{
+	width: 15px;
+	height: 15px;
+}
+
+.radio-label{
+	font-family: Arial, Helvetica, sans-serif;
+	color: #32373B;
+	font-size: 20px
+}
+.goal-submit{
+	margin-top: 10px;
+	padding:10px 50px 10px 50px;
+	font-family: Arial, Helvetica, sans-serif;
+	color: white;
+	font-size: 20px;
+	background-color: black;
+	border: none;
+  	text-decoration: none;
+  	cursor: pointer;
+}
+.goal-submit:hover{
+	background-color: #F4D6CC;
+	color: black;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
