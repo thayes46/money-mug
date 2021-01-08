@@ -104,7 +104,8 @@ void loop() {
             if (newAcceleration > oldAcceleration + TOLERANCE) {
               while (readAcceleration() > oldAcceleration + TOLERANCE){};
               //fetch concern from serial
-              getDataFromPC();  
+              getDataFromPC();
+              Serial.println("received data: "); Serial.println(concern);
               showLevel(concern, colorScheme); 
               delay(5000);
               clearPixels();

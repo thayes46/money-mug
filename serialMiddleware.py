@@ -1,15 +1,7 @@
 
-#=====================================
-
-#  Function Definitions
-
-#=====================================
-
 def sendToArduino(sendStr):
     serialConnection.write(sendStr.encode('utf-8'))
 
-
-#======================================
 
 def recvFromArduino():
     global startMarker, endMarker
@@ -32,10 +24,7 @@ def recvFromArduino():
     return(ck)
 
 
-#============================
-
 def waitForArduino():
-
     # wait until the Arduino sends 'Arduino Ready' - allows time for Arduino reset
     
     global startMarker, endMarker
@@ -50,8 +39,6 @@ def waitForArduino():
 
         print(msg) 
         print()
-        
-#======================================
 
 def run(td):
     numLoops = len(td)
@@ -81,12 +68,6 @@ def run(td):
         time.sleep(5)
 
 
-#======================================
-
-# The Program Starts Here
-
-#======================================
-
 import serial
 import time
 
@@ -100,24 +81,21 @@ baudRate = 9600
 serialConnection = serial.Serial(serPort, baudRate)
 print("Serial port " + serPort + " opened  Baudrate " + str(baudRate))
 
-
 startMarker = 60
 endMarker = 62
-
 
 waitForArduino()
 
 
 testData = []
-
+concern = input("ConcernValue")
 # testdata will send a string followed by the RGB values or the concern level 
 # for the testData to be valid correct fields needs to be setup on the arduino code
 
 #  to send New RGB Colors
 # testData.append("<update,200,0,0>")
-
-#  to send ConcernValue
-testData.append("<update,20")
+    #  to send ConcernValue
+testData.append("<update," + concern + ">")
 
 
 run(testData)
