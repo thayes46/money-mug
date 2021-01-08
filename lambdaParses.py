@@ -30,8 +30,8 @@ def lambda_handler(event, context):
     spent = 0
     percent = 0
 
-    connection = pymysql.connect(user=username, password=password,
-        database=database_name, port=3306, endpoint)
+    connection = pymysql.connect(endpoint, user=username, passwd=password,
+        db=database_name, port=3306)
 
 
     try:
